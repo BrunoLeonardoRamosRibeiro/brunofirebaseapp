@@ -19,6 +19,18 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Entrar'),
         centerTitle: true,
+        actions: [
+          FlatButton(
+            onPressed: (){
+              Navigator.of(context).pushReplacementNamed('/signup');
+            },
+            textColor: Colors.white,
+            child: Text(
+              'CRIAR CONTA',
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Card(
@@ -26,7 +38,7 @@ class LoginScreen extends StatelessWidget {
           child: Form(
             key: formKey,
             child: Consumer<UserManager>(
-              builder: (_, userManager, child){
+              builder: (_, userManager, child) {
                 return ListView(
                   padding: EdgeInsets.all(16),
                   shrinkWrap: true,
@@ -63,40 +75,47 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(
                       height: 44,
                       child: RaisedButton(
-                        onPressed: userManager.loading ? null : () {
-                          if (formKey.currentState.validate()) {
-                            print(emailController.text);
-                            print(passController.text);
+                        onPressed: userManager.loading
+                            ? null
+                            : () {
+                                if (formKey.currentState.validate()) {
+                                  print(emailController.text);
+                                  print(passController.text);
 
-                            userManager.signIn(
-                                user: User(
-                                  email: emailController.text,
-                                  password: passController.text,
-                                ),
-                                onFail: (e) {
-                                  print(e);
-                                  scaffoldKey.currentState.showSnackBar(
-                                    SnackBar(
-                                      content: Text('Falha ao Entrar: $e'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                },
-                                onSuccess: () {
-                                  print('Sucesso!');
-                                  //TODO: FECHAR TELA DE LOGIN
-                                });
-                          }
-                        },
+                                  userManager.signIn(
+                                      user: User(
+                                        email: emailController.text,
+                                        password: passController.text,
+                                      ),
+                                      onFail: (e) {
+                                        print(e);
+                                        scaffoldKey.currentState.showSnackBar(
+                                          SnackBar(
+                                            content:
+                                                Text('Falha ao Entrar: $e'),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      },
+                                      onSuccess: () {
+                                        print('Sucesso!');
+                                        //TODO: FECHAR TELA DE LOGIN
+                                      });
+                                }
+                              },
                         color: Theme.of(context).primaryColor,
-                        disabledColor: Theme.of(context).primaryColor.withAlpha(100),
+                        disabledColor:
+                            Theme.of(context).primaryColor.withAlpha(100),
                         textColor: Colors.white,
-                        child: userManager.loading? CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Colors.white),
-                        ) : Text(
-                          'Entrar',
-                          style: TextStyle(fontSize: 18),
-                        ),
+                        child: userManager.loading
+                            ? CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation(Colors.white),
+                              )
+                            : Text(
+                                'Entrar',
+                                style: TextStyle(fontSize: 18),
+                              ),
                       ),
                     ),
                   ],
